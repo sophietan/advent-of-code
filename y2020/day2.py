@@ -28,5 +28,5 @@ def solution_2(problem: List[str]):
 
 if __name__ == '__main__':
     with open('inputs/day2.txt', 'r') as f:
-        input = [n.strip('\n') for n in f.readlines()]
-        print(solution_2(input))
+        _input = [n.strip('\n') for n in f.readlines()]
+        print(solution_2(_input))

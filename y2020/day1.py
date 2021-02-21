@@ -21,5 +21,5 @@ def solution_2(problem: List[int]):
 
 if __name__ == '__main__':
     with open('inputs/day1.txt', 'r') as f:
-        input = [int(n.strip('\n')) for n in f.readlines()]
-        print(solution_2(input))
+        _input = [int(n.strip('\n')) for n in f.readlines()]
+        print(solution_2(_input))
