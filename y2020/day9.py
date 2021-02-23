@@ -1,6 +1,5 @@
-from pprint import pprint
-from typing import List
 from itertools import combinations
+from typing import List
 
 
 def solution_1(_input: List[int]):

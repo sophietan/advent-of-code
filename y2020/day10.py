@@ -1,26 +1,34 @@
-from pprint import pprint
+from collections import defaultdict
 from typing import List
 
 
-def solution(jolts: List[int]):
-    hist = {1: 0, 2: 0, 3: 0}
-    highest = max(jolts)
-    jolts = [0] + jolts + [highest + 3]
-    previous_jolt = 0
-    for jolt in jolts:
-        diff = jolt - previous_jolt
-        if 4 > diff > 0:
-            hist[diff] += 1
-        previous_jolt = jolt
-    return hist[1] * hist[3]
+def solution(adapters: List[int]):
+    diffs = defaultdict(int)
+    highest = max(adapters)
+    adapters = [0] + adapters + [highest + 3]
+    previous_adapter = 0
+    for adapter in adapters:
+        diff = adapter - previous_adapter
+        diffs[diff] += 1
+        previous_adapter = adapter
+    return diffs[1] * diffs[3]
 
 
-def solution_2(problem: List[int]):
-    return NotImplemented
+def solution_2(adapters: List[int]):
+    permutations = defaultdict(int)
+    highest = max(adapters)
+    adapters = [0] + adapters + [highest + 3]
+    permutations[0] = 1
+    for adapter in adapters:
+        permutations[adapter] += permutations[adapter - 1]
+        permutations[adapter] += permutations[adapter - 2]
+        permutations[adapter] += permutations[adapter - 3]
+
+    return permutations[adapters[-1]]
 
 
 if __name__ == '__main__':
     with open('../y2020/inputs/day10.txt', 'r') as f:
-        jolts = [int(n.strip('\n')) for n in f.readlines()]
-        jolts.sort()
-        print(solution(jolts))
+        adapters = [int(n.strip('\n')) for n in f.readlines()]
+        adapters.sort()
+        print(solution_2(adapters))
