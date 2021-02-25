@@ -54,6 +54,6 @@ def solution_2(problem):
 if __name__ == '__main__':
     with open('inputs/day18.txt', 'r') as f:
         _input = [line.strip() for line in f.readlines()]
-        print(solution_linear(_input))
+        print(solution(_input))
 
 
