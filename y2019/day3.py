@@ -67,7 +67,7 @@ def solution_2(wire_1: List[str], wire_2: List[str]):
 
 
 if __name__ == '__main__':
-    with open('y2019/inputs/day3.txt', 'r') as f:
+    with open('inputs/day3.txt', 'r') as f:
         wire_1, wire_2 = f.readlines()
         pprint(solution_2(wire_1=wire_1.strip().split(','),
                           wire_2=wire_2.strip().split(',')))
