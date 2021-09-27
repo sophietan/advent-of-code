@@ -1,5 +1,5 @@
 import operator
-from typing import List
+from typing import List, Any
 
 OPS = {
     '+': operator.add,
@@ -19,41 +19,60 @@ def solution(expressions: List[str]):
     return total
 
 
-def evaluate(expression: List[str], eval_stack=None):
-    if eval_stack is None:
-        eval_stack = []
+def evaluate(expression: List[str]):
     total = 0
-    eval_stack += expression
-    print(eval_stack)
     op = operator.add
-    while op:
-        current = eval_stack.pop(0)
-        print(f'current: {current}')
 
-        print(eval_stack)
-        if current == '(':
-            current = evaluate([], eval_stack)
+    while expression:
+        token = expression.pop(0)
 
-        total = op(total, int(current))
-        print(f'total: {total}')
-        if eval_stack:
-            op = OPS[eval_stack.pop(0)]
-        else:
-            op = None
-        print(eval_stack)
-        print('------------------')
-
+        if token.isdigit():
+            value = int(token)
+            total = op(total, value)
+        elif token == '+':
+            op = operator.add
+        elif token == '*':
+            op = operator.mul
+        elif token == '(':
+            val = evaluate_expression(expression)
+            total = op(total, val)
+        elif token == ')':
+            break
     return total
 
 
-def solution_2(problem):
+def evaluate_expression(expression: list[str]):
+    """Multiplication is distributive! DUH!"""
+    total = 0
+    multiplier = 1
+    while expression:
+        token = expression.pop(0) # can also used a dequeue as well.
+        if token.isdigit():
+            value = int(token)
+            total += multiplier * value
+        elif token == '*':
+            multiplier = total
+            total = 0
+        elif token == '(':
+            val = evaluate_expression(expression)
+            total += multiplier * val
+        elif token == ')':
+            break
+    return total
 
-    return NotImplemented
+
+def solution_2(expressions: list[str]):
+    total = 0
+    for ex in expressions:
+        tokens = ex.replace('(', '( ').replace(')', ' )')
+        total += evaluate_expression(tokens.split())
+
+    return total
 
 
 if __name__ == '__main__':
     with open('inputs/day18.txt', 'r') as f:
         _input = [line.strip() for line in f.readlines()]
-        print(solution(_input))
+        print(solution_2(_input))
 
 
