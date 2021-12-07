@@ -23,7 +23,7 @@ def increasing_fuel(pos: int, relative_pos: int):
 def solution_2(positions: list[int]):
     costs = []
     crabs = sorted(positions)
-    for p in range(len(crabs)):
+    for p in range(min(crabs), max(crabs) + 1):
         fuel_costs = sum([increasing_fuel(p, c) for c in crabs])
         costs.append(fuel_costs)
     return min(costs)
