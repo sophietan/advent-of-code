@@ -1,3 +1,7 @@
+from collections import Counter
+from itertools import count
+
+
 def solution_1(report: list[list[str]]):
     report_len = len(report)
     freq = count_frequency(report)
@@ -17,30 +21,22 @@ def count_frequency(report: list[list[str]]):
     return freq
 
 
-def solution_2(report: list[list[str]]):
-    report_len = len(report)
-    freq = count_frequency(report)
-
-    most_common_bits = ''.join(
-        ['1' if count >= (report_len // 2) else '0' for count in freq]
-    )
-    least_common_bits = ''.join(
-        ['0' if count >= (report_len // 2) else '1' for count in freq]
-    )
-    o2 = filter_values(report, most_common_bits)
-    co = filter_values(report, least_common_bits)
-
-    return int(o2, 2) * int(co, 2)
+def _solution_2(report: list[str], most_common: str, least_common: str) -> str:
+    remaining = report.copy()
+    for n in count():
+        if len(remaining) == 1:
+            return remaining[0]
+        counter = Counter(number[n] for number in remaining)
+        zeroes = counter.get('0', 0)
+        ones = counter.get('1', 0)
+        choice = most_common if ones >= zeroes else least_common
+        remaining = [number for number in remaining if number[n] == choice]
 
 
-def filter_values(numbers: list, bit_criteria: str):
-    copy = numbers.copy()
-    pos = 0
-    byte_len = len(numbers[0])
-    while len(copy) > 1 and pos < byte_len:
-        copy = list(filter(lambda line: line[pos] == bit_criteria[pos], copy))
-        pos += 1
-    return copy[0]
+def solution_2(report: list[str]):
+    o2 = _solution_2(report, '1', '0')
+    co2 = _solution_2(report, '0', '1')
+    return int(o2, 2) * int(co2, 2)
 
 
 if __name__ == '__main__':
