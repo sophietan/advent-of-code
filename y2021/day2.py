@@ -28,17 +28,25 @@ class Submarine:
         return self.calculate_result()
 
 
-def solution_1(input_data: list):
-    sub = Submarine(input_data)
-    return sub.process_instructions()
+def solution(input_data: list):
+    depth = 0
+    aim = 0
+    horizontal = 0
+    for direction, unit in input_data:
+        if direction == 'forward':
+            horizontal += int(unit)
+            depth += aim * int(unit)
+        elif direction == 'up':
+            aim -= int(unit)
+        elif direction == 'down':
+            aim += int(unit)
+        else:
+            raise RuntimeError('Unsupported direction')
 
-
-def solution_2(input_data: list):
-    sub = Submarine(input_data)
-    return sub.process_instructions()
+    return depth * horizontal
 
 
 if __name__ == '__main__':
     with open('input/day2.txt', 'r') as f:
         instructions = [line.split() for line in f.readlines()]
-        print(solution_2(instructions))
+        print(solution(instructions))
