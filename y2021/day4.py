@@ -1,8 +1,3 @@
-import operator
-from functools import reduce
-from pprint import pprint
-
-
 class BingoBoard:
 
     def __init__(self,
@@ -11,19 +6,15 @@ class BingoBoard:
         self.numbers = board_numbers.copy()
         self.unmatched_numbers = board_numbers.copy()
         self.matched_indices = []
-        self.score = sum(board_numbers)
         self.board_size = board_size
         self.won = False
-        self.last_num = None
 
     def check_number(self, number: int):
         if number in self.unmatched_numbers:
             index = self.numbers.index(number)
             self.matched_indices.append(index)
             self.unmatched_numbers.remove(number)
-            self.score -= number
             self.won = self.check_if_won(index)
-            self.last_num = number
 
     def check_if_won(self, index: int):
         row, col = divmod(index, self.board_size)
@@ -39,6 +30,9 @@ class BingoBoard:
 
         return False
 
+    def get_score(self, last_number: int):
+        return sum(self.unmatched_numbers) * last_number
+
     def __str__(self):
         grid = []
         for i in range(self.board_size):
@@ -53,20 +47,18 @@ def solution_1(bingo_numbers: list[int], boards: list[BingoBoard]):
         for b in boards:
             b.check_number(num)
             if b.won:
-                print(b)
-                print(b.score, num)
-                return b.score * num
+                return b.get_score(num)
 
 
 def solution_2(bingo_numbers: list[int], boards: list[BingoBoard]):
-    won_boards = []
+    won_boards = set()
     for num in bingo_numbers:
         for b in boards:
             b.check_number(num)
             if b.won:
-                won_boards.append(b)
-            if len(won_boards) == len(boards):
-                return b.score * b.last_num
+                won_boards.add(b)
+                if len(won_boards) == len(boards):
+                    return b.get_score(num)
     raise RuntimeError('Not everyone wins')
 
 
